@@ -1,0 +1,32 @@
+{
+  "name": "frontend",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.2.4",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^4.7.0",
+    "tailwindcss": "^4.2.4",
+    "typescript": "~6.0.2",
+    "vite": "^6.3.5"
+  },
+  "dependencies": {
+    "antd": "^6.3.7",
+    "axios": "^1.15.2",
+    "formik": "^2.4.9",
+    "prop-types": "^15.8.1",
+    "react": "^19.2.5",
+    "react-dom": "^19.2.5",
+    "react-router-dom": "^7.14.2",
+    "react-stars": "^2.2.5",
+    "sonner": "^2.0.7",
+    "yup": "^1.7.1"
+  }
+}
