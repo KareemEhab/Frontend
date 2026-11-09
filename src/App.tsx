@@ -2,9 +2,11 @@ import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { CartProvider } from "./cart/CartContext";
 import { RootLayout } from "./layouts/RootLayout";
 import { CartPage } from "./pages/CartPage";
+import { CheckoutPage } from "./pages/CheckoutPage";
 import { GalleryPage } from "./pages/GalleryPage";
 import { HomePage } from "./pages/HomePage";
 import { LoginPage } from "./pages/LoginPage";
+import { OrderCompletePage } from "./pages/OrderCompletePage";
 import { RegisterPage } from "./pages/RegisterPage";
 import { CourseDetailPage } from "./pages/CourseDetailPage";
 
@@ -27,6 +29,8 @@ export function App() {
           <Route path="login" element={<LoginPage />} />
           <Route path="register" element={<RegisterPage />} />
           <Route path="cart" element={<CartPage />} />
+          <Route path="checkout" element={<CheckoutPage />} />
+          <Route path="order-complete" element={<OrderCompletePage />} />
           <Route path="gallery" element={<GalleryPage />} />
           <Route path="contact" element={<FooterLinkPage title="Contact Us" />} />
           <Route path="articles" element={<FooterLinkPage title="Latest Articles" />} />

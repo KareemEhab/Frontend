@@ -26,7 +26,7 @@ export function LoginPage() {
   const navigate = useNavigate();
   const location = useLocation();
   const [searchParams] = useSearchParams();
-  const { addCourseId } = useCart();
+  const { addCourseId, refresh } = useCart();
 
   if (getAuthToken()) {
     return <Navigate to="/" replace />;
@@ -54,7 +54,8 @@ export function LoginPage() {
                 return;
               }
               setAuthToken(data);
-              flushPendingCartAfterAuth(addCourseId);
+              await refresh();
+              await flushPendingCartAfterAuth(addCourseId);
               const redirectParam = searchParams.get("redirect");
               const stateFrom = (location.state as { from?: string } | null)?.from;
               const target = safeInternalPath(redirectParam, safeInternalPath(stateFrom, "/"));

@@ -1,5 +1,6 @@
-import { createContext, useCallback, useContext, useMemo, useState, type ReactNode } from "react";
-import { readCartCourseIds, writeCartCourseIds } from "./cartCookie";
+import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
+import { api } from "../api/client";
+import { getAuthToken } from "../auth/token";
 
 export const PENDING_CART_STORAGE_KEY = "workshop_pending_cart_add";
 
@@ -12,43 +13,72 @@ type CartContextValue = {
   courseIds: string[];
   itemCount: number;
   /** Returns true if the id was newly added, false if it was already in the cart. */
-  addCourseId: (courseId: string) => boolean;
-  removeCourseId: (courseId: string) => void;
+  addCourseId: (courseId: string) => Promise<boolean>;
+  removeCourseId: (courseId: string) => Promise<void>;
   setCourseIds: (ids: string[]) => void;
+  refresh: () => Promise<void>;
+  clearCart: () => Promise<void>;
 };
 
 const CartContext = createContext<CartContextValue | null>(null);
 
 export function CartProvider({ children }: { children: ReactNode }) {
-  const [courseIds, setCourseIdsState] = useState<string[]>(() => readCartCourseIds());
-
-  const persist = useCallback((ids: string[]) => {
-    writeCartCourseIds(ids);
-    setCourseIdsState(ids);
-  }, []);
-
-  const addCourseId = useCallback((courseId: string) => {
-    const current = readCartCourseIds();
-    if (current.includes(courseId)) return false;
-    persist([...current, courseId]);
-    return true;
-  }, [persist]);
-
-  const removeCourseId = useCallback(
-    (courseId: string) => {
-      const current = readCartCourseIds();
-      persist(current.filter((id) => id !== courseId));
-    },
-    [persist],
-  );
+  const [courseIds, setCourseIdsState] = useState<string[]>([]);
+  const loggedIn = Boolean(getAuthToken());
 
   const setCourseIds = useCallback(
     (ids: string[]) => {
       const unique = [...new Set(ids.filter((x) => typeof x === "string" && x.length > 0))];
-      persist(unique);
+      setCourseIdsState(unique);
     },
-    [persist],
+    [],
   );
+
+  const refresh = useCallback(async () => {
+    if (!getAuthToken()) {
+      setCourseIdsState([]);
+      return;
+    }
+    const res = await api.get<{ courseIds: string[] }>("/api/cart");
+    const ids = Array.isArray(res.data?.courseIds) ? res.data.courseIds : [];
+    setCourseIds(ids.filter((x) => typeof x === "string" && x.length > 0));
+  }, []);
+
+  const clearCart = useCallback(async () => {
+    if (!getAuthToken()) {
+      setCourseIdsState([]);
+      return;
+    }
+    await api.delete("/api/cart");
+    setCourseIdsState([]);
+  }, []);
+
+  const addCourseId = useCallback(
+    async (courseId: string) => {
+      const current = courseIds;
+      if (current.includes(courseId)) return false;
+      const res = await api.post<{ courseIds: string[] }>("/api/cart/items", { courseId });
+      const ids = Array.isArray(res.data?.courseIds) ? res.data.courseIds : [];
+      setCourseIds(ids);
+      return true;
+    },
+    [courseIds, setCourseIds],
+  );
+
+  const removeCourseId = useCallback(
+    async (courseId: string) => {
+      const res = await api.delete<{ courseIds: string[] }>(`/api/cart/items/${encodeURIComponent(courseId)}`);
+      const ids = Array.isArray(res.data?.courseIds) ? res.data.courseIds : [];
+      setCourseIds(ids);
+    },
+    [setCourseIds],
+  );
+
+  useEffect(() => {
+    // Keep state in sync across auth changes (login/register/logout flows call refresh/clear too).
+    if (loggedIn) refresh().catch(() => {});
+    else setCourseIdsState([]);
+  }, [loggedIn, refresh]);
 
   const value = useMemo<CartContextValue>(
     () => ({
@@ -57,8 +87,10 @@ export function CartProvider({ children }: { children: ReactNode }) {
       addCourseId,
       removeCourseId,
       setCourseIds,
+      refresh,
+      clearCart,
     }),
-    [courseIds, addCourseId, removeCourseId, setCourseIds],
+    [courseIds, addCourseId, removeCourseId, setCourseIds, refresh, clearCart],
   );
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;

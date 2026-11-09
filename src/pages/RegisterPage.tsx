@@ -46,7 +46,7 @@ function readRegisterToken(headers: Record<string, unknown>): string | undefined
 export function RegisterPage() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { addCourseId } = useCart();
+  const { addCourseId, refresh } = useCart();
 
   if (getAuthToken()) {
     return <Navigate to="/" replace />;
@@ -79,7 +79,8 @@ export function RegisterPage() {
                 return;
               }
               setAuthToken(token);
-              flushPendingCartAfterAuth(addCourseId);
+              await refresh();
+              await flushPendingCartAfterAuth(addCourseId);
               const stateFrom = (location.state as { from?: string } | null)?.from;
               navigate(safeInternalPath(stateFrom, "/"), { replace: true });
             } catch (err) {

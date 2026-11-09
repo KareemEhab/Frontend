@@ -66,21 +66,21 @@ export function CourseDetailPage() {
 
   if (loading) {
     return (
-      <div className="bg-[#F8FAFC] px-[2.5rem] pt-[2.8125rem] pb-[7.8125rem]">
-        <p className="mx-auto max-w-[90rem] font-sans text-[0.875rem] text-[#334155]">Loading…</p>
+      <div className="bg-[#F8FAFC] px-10 pt-11.25 pb-31.25">
+        <p className="mx-auto max-w-360 font-sans text-[0.875rem] text-[#334155]">Loading…</p>
       </div>
     );
   }
 
   if (error || !course) {
     return (
-      <div className="bg-[#F8FAFC] px-[2.5rem] pt-[2.8125rem] pb-[7.8125rem]">
-        <div className="mx-auto max-w-[90rem] font-sans text-[0.875rem] text-red-600" role="alert">
+      <div className="bg-[#F8FAFC] px-10 pt-11.25 pb-31.25">
+        <div className="mx-auto max-w-360 font-sans text-[0.875rem] text-red-600" role="alert">
           {error ?? "Course not found."}
         </div>
         <Link
           to="/"
-          className="mx-auto mt-[1rem] block max-w-[90rem] font-sans text-[0.875rem] font-medium text-[#2563EB] underline-offset-2 hover:underline"
+          className="mx-auto mt-4 block max-w-360 font-sans text-[0.875rem] font-medium text-[#2563EB] underline-offset-2 hover:underline"
         >
           Back to Home
         </Link>
@@ -99,10 +99,10 @@ export function CourseDetailPage() {
       : null;
 
   return (
-    <section className="bg-[#F8FAFC] px-[2.5rem] pt-[2.8125rem] pb-[7.8125rem]">
-      <div className="mx-auto grid max-w-[90rem] gap-[2rem] lg:grid-cols-[minmax(0,1fr)_min(100%,22.5rem)] lg:gap-[2.5rem]">
-        <div className="rounded-[inherit] bg-[#F8FAFC] p-[1.25rem]">
-          <nav className="flex flex-wrap items-center gap-[0.5rem]" aria-label="Breadcrumb">
+    <section className="bg-[#F8FAFC] px-10 pt-11.25 pb-31.25">
+      <div className="mx-auto grid max-w-360 gap-8 lg:grid-cols-[minmax(0,1fr)_min(100%,22.5rem)] lg:gap-10">
+        <div className="rounded-[inherit] bg-[#F8FAFC] p-5">
+          <nav className="flex flex-wrap items-center gap-2" aria-label="Breadcrumb">
             <Link
               to="/"
               className={`${breadcrumbTextClass} cursor-pointer text-[#334155] hover:text-[#0F172A] hover:underline`}
@@ -115,15 +115,15 @@ export function CourseDetailPage() {
             </span>
           </nav>
 
-          <div className="mt-[2.5rem] flex flex-col">
-            <h1 className="mb-[2.25rem] font-sans text-[2.5rem] font-bold leading-[140%] tracking-[-0.02em] text-[#0F172A]">
+          <div className="mt-10 flex flex-col">
+            <h1 className="mb-9 font-sans text-[2.5rem] font-bold leading-[140%] tracking-[-0.02em] text-[#0F172A]">
               {course.title}
             </h1>
-            <p className="mb-[1.5rem] font-sans text-[1rem] font-normal leading-[160%] text-[#334155]">
+            <p className="mb-6 font-sans text-[1rem] font-normal leading-[160%] text-[#334155]">
               {course.description}
             </p>
 
-            <div className="mb-[1.5rem] flex flex-wrap items-center gap-[0.5rem]">
+            <div className="mb-6 flex flex-wrap items-center gap-2">
               <div className="inline-flex items-center">
                 <ReactStars
                   count={5}
@@ -139,42 +139,42 @@ export function CourseDetailPage() {
               <span className="font-sans text-[0.875rem] font-normal leading-[150%] text-[#334155]" aria-hidden>
                 |
               </span>
-              <div className="flex flex-wrap items-center gap-[0.5rem] font-sans text-[0.875rem] font-normal leading-[150%] text-[#334155]">
+              <div className="flex flex-wrap items-center gap-2 font-sans text-[0.875rem] font-normal leading-[150%] text-[#334155]">
                 <span>{course.hours} Total Hours.</span>
                 <span>{course.lectures} Lectures.</span>
                 <span>{course.level}</span>
               </div>
             </div>
 
-            <div className="mb-[1.5rem] flex items-center gap-[0.5rem]">
+            <div className="mb-6 flex items-center gap-2">
               <img
                 src={authorFallback}
                 alt=""
                 width={40}
                 height={40}
-                className="h-[2.5rem] w-[2.5rem] shrink-0 rounded-full object-cover"
+                className="h-10 w-10 shrink-0 rounded-full object-cover"
               />
               <p className="font-sans text-[0.875rem] font-normal leading-[150%] text-[#334155]">
                 Created by <span className="text-[#2563EB]">{course.author}</span>
               </p>
             </div>
 
-            <div className="flex items-center gap-[0.75rem] font-sans text-[0.875rem] font-normal leading-[150%] text-[#334155]">
-              <img src={globeIcon} alt="" width={20} height={20} className="h-[1.25rem] w-[1.25rem] shrink-0" />
+            <div className="flex items-center gap-3 font-sans text-[0.875rem] font-normal leading-[150%] text-[#334155]">
+              <img src={globeIcon} alt="" width={20} height={20} className="h-5 w-5 shrink-0" />
               <span>{formatLanguages(course.languages)}</span>
             </div>
           </div>
         </div>
 
-        <aside className="h-fit rounded-[1rem] border border-solid border-[#E2E8F0] bg-white p-[1.5rem] lg:sticky lg:top-[1rem]">
+        <aside className="h-fit rounded-2xl border border-solid border-[#E2E8F0] bg-white p-6 lg:sticky lg:top-4">
           <img
             src={heroSrc}
             alt=""
-            className="w-full rounded-[0.5rem] object-cover"
+            className="w-full rounded-lg object-cover"
             onError={() => setHeroBroken(true)}
           />
 
-          <div className="mt-[2rem] flex flex-wrap items-baseline gap-[0.125rem]">
+          <div className="mt-8 flex flex-wrap items-baseline gap-0.5">
             <span className="font-sans text-[1.5rem] font-semibold leading-[140%] text-[#0F172A]">
               ${course.price.toFixed(1)}
             </span>
@@ -190,26 +190,26 @@ export function CourseDetailPage() {
             ) : null}
           </div>
 
-          <div className="mt-[1.5rem] flex flex-col gap-[1rem]">
+          <div className="mt-6 flex flex-col gap-4">
             <button
               type="button"
-              className="w-full cursor-pointer rounded-[0.25rem] border-none bg-[#00B8FF] py-[0.8125rem] font-sans text-[0.875rem] font-medium leading-[160%] text-white transition-opacity hover:opacity-90"
+              className="w-full cursor-pointer rounded-sm border-none bg-[#00B8FF] py-3.25 font-sans text-[0.875rem] font-medium leading-[160%] text-white transition-opacity hover:opacity-90"
               onClick={() => addToCartAuth({ id: course.id, title: course.title })}
             >
               Add To Cart
             </button>
             <button
               type="button"
-              className="w-full cursor-pointer rounded-[0.25rem] border border-solid border-[#00B8FF] bg-transparent py-[0.8125rem] font-sans text-[0.875rem] font-medium leading-[160%] text-[#00B8FF] transition-colors hover:bg-[#00B8FF]/5"
+              className="w-full cursor-pointer rounded-sm border border-solid border-[#00B8FF] bg-transparent py-3.25 font-sans text-[0.875rem] font-medium leading-[160%] text-[#00B8FF] transition-colors hover:bg-[#00B8FF]/5"
             >
               Buy Now
             </button>
           </div>
 
-          <div className="mt-[1.75rem] ml-[-1.5rem] h-px w-[calc(100%+3rem)] bg-[#E2E8F0]" role="separator" />
+          <div className="mt-7 -ml-6 h-px w-[calc(100%+3rem)] bg-[#E2E8F0]" role="separator" />
 
-          <p className="mt-[1.5rem] font-sans text-[1rem] font-medium leading-[160%] text-[#0F172A]">Share</p>
-          <div className="mt-[0.5rem]">
+          <p className="mt-6 font-sans text-[1rem] font-medium leading-[160%] text-[#0F172A]">Share</p>
+          <div className="mt-2">
             <img src={linksPng} alt="" className="max-w-full object-contain object-left" />
           </div>
         </aside>

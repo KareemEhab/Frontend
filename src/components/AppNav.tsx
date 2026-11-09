@@ -8,10 +8,10 @@ import { clearAuthToken, getAuthToken } from "../auth/token";
 export function AppNav() {
   const navigate = useNavigate();
   const loggedIn = Boolean(getAuthToken());
-  const { itemCount } = useCart();
+  const { itemCount, clearCart, setCourseIds } = useCart();
 
   return (
-    <header className="border-b border-solid border-[#E2E8F0] bg-transparent px-[0.875rem] py-[1.875rem]">
+    <header className="border-b border-solid border-[#E2E8F0] bg-transparent px-3.5 py-7.5">
       <div className="mx-auto flex max-w-7xl items-center justify-between">
         <Link
           to="/"
@@ -24,7 +24,7 @@ export function AppNav() {
           />
         </Link>
 
-        <div className="flex flex-wrap items-center justify-end gap-6 sm:gap-10 md:gap-[5rem]">
+        <div className="flex flex-wrap items-center justify-end gap-6 sm:gap-10 md:gap-20">
           <Link
             to="/cart"
             aria-label="Shopping cart"
@@ -38,7 +38,7 @@ export function AppNav() {
               className="block"
             />
             {itemCount > 0 ? (
-              <span className="absolute -top-[0.375rem] -right-[0.375rem] flex h-[0.875rem] min-w-[0.875rem] items-center justify-center rounded-full bg-[#FD6F00] px-[0.125rem] font-sans text-[0.5625rem] font-normal leading-[100%] text-white">
+              <span className="absolute -top-1.5 -right-1.5 flex h-3.5 min-w-3.5 items-center justify-center rounded-full bg-[#FD6F00] px-0.5 font-sans text-[0.5625rem] font-normal leading-[100%] text-white">
                 {itemCount > 99 ? "99+" : itemCount}
               </span>
             ) : null}
@@ -50,8 +50,12 @@ export function AppNav() {
                 variant="navLogin"
                 type="button"
                 onClick={() => {
-                  clearAuthToken();
-                  navigate("/", { replace: true });
+                  (async () => {
+                    await clearCart().catch(() => {});
+                    setCourseIds([]);
+                    clearAuthToken();
+                    navigate("/", { replace: true });
+                  })();
                 }}
               >
                 Sign out

@@ -75,10 +75,10 @@ function CourseCard({ course, onCartClick }: { course: ApiCourse; onCartClick: (
     <article className={cardShellClass}>
       <div className="relative">
         <Link to={`/courses/${course.id}`} className="block text-inherit no-underline">
-          <div className="relative overflow-hidden rounded-[0.5rem]">
-            <img src={img} alt="" className="aspect-[4/3] w-full object-cover" />
+          <div className="relative overflow-hidden rounded-lg">
+            <img src={img} alt="" className="aspect-4/3 w-full object-cover" />
             {course.discount > 0 ? (
-              <span className="absolute top-[0.625rem] right-[0.625rem] rounded-[0.25rem] bg-[#F232BD] px-[0.5rem] py-[0.125rem] font-sans text-[0.75rem] font-bold leading-[0.9375rem] text-white">
+              <span className="absolute top-2.5 right-2.5 rounded-sm bg-[#F232BD] px-2 py-0.5 font-sans text-[0.75rem] font-bold leading-3.75 text-white">
                 -${course.discount}
               </span>
             ) : null}
@@ -87,7 +87,7 @@ function CourseCard({ course, onCartClick }: { course: ApiCourse; onCartClick: (
         {course.addToCart ? (
           <button
             type="button"
-            className="absolute bottom-[0.875rem] left-[0.875rem] z-10 inline-flex cursor-pointer items-center justify-center rounded-sm border-none bg-transparent p-0"
+            className="absolute bottom-3.5 left-3.5 z-10 inline-flex cursor-pointer items-center justify-center rounded-sm border-none bg-transparent p-0"
             aria-label={`Add ${course.title} to cart`}
             onClick={(e) => {
               e.preventDefault();
@@ -95,31 +95,31 @@ function CourseCard({ course, onCartClick }: { course: ApiCourse; onCartClick: (
               onCartClick(course);
             }}
           >
-            <img src={cardCartIcon} alt="" width={22} height={22} className="block h-[1.375rem] w-[1.375rem]" />
+            <img src={cardCartIcon} alt="" width={22} height={22} className="block h-5.5 w-5.5" />
           </button>
         ) : null}
       </div>
 
-      <Link to={`/courses/${course.id}`} className="mt-[1rem] block text-inherit no-underline">
-        <div className="flex items-start justify-between gap-[0.5rem]">
+      <Link to={`/courses/${course.id}`} className="mt-4 block text-inherit no-underline">
+        <div className="flex items-start justify-between gap-2">
           <span className="font-sans text-[0.875rem] font-bold leading-[150%] text-[#00B8FF]">
             ${course.price.toFixed(1)}
           </span>
           <span
-            className={`max-w-[5.3125rem] shrink-0 truncate rounded-[0.625rem] px-[0.0625rem] py-[0.375rem] text-center font-sans text-[0.75rem] font-semibold leading-[100%] ${tag.bg} ${tag.text}`}
+            className={`max-w-21.25 shrink-0 truncate rounded-[0.625rem] px-0.25 py-1.5 text-center font-sans text-[0.75rem] font-semibold leading-[100%] ${tag.bg} ${tag.text}`}
             title={course.category}
           >
             {course.category}
           </span>
         </div>
 
-        <h3 className="mt-[0.75rem] font-sans text-[1.125rem] font-semibold leading-[160%] text-[#0F172A]">{course.title}</h3>
+        <h3 className="mt-3 font-sans text-[1.125rem] font-semibold leading-[160%] text-[#0F172A]">{course.title}</h3>
 
-        <p className="mt-[0.375rem] font-sans text-[0.875rem] font-normal leading-[150%] text-slate-600">
+        <p className="mt-1.5 font-sans text-[0.875rem] font-normal leading-[150%] text-slate-600">
           By {course.author}
         </p>
 
-        <div className="mt-[0.5rem] flow-root">
+        <div className="mt-2 flow-root">
           <div className="pointer-events-none inline-flex items-center gap-[0.15625rem]">
             <div className="inline-flex items-center">
               <ReactStars
@@ -139,7 +139,7 @@ function CourseCard({ course, onCartClick }: { course: ApiCourse; onCartClick: (
           </div>
         </div>
 
-        <p className="mt-[0.5rem] font-sans text-[0.875rem] font-normal leading-[150%] text-[#334155]">
+        <p className="mt-2 font-sans text-[0.875rem] font-normal leading-[150%] text-[#334155]">
           {course.hours} Total Hours. {course.lectures} Lectures. {course.level}
         </p>
       </Link>
@@ -190,11 +190,11 @@ export function TopCoursesSection() {
   }, [courses, categories, selectedCategoryId]);
 
   return (
-    <section className="bg-white p-[2.5rem] max-md:p-[1.5rem]">
-      <div className="mx-auto max-w-[90rem]">
+    <section className="bg-white p-10 max-md:p-6">
+      <div className="mx-auto max-w-360">
         <h2 className="text-center font-sans text-[1.5rem] font-semibold leading-[140%] text-[#0F172A]">Top Courses</h2>
 
-        <div className="mt-[2.5rem] flex flex-wrap items-center justify-center gap-x-[1.75rem] gap-y-[1.125rem]">
+        <div className="mt-10 flex flex-wrap items-center justify-center gap-x-7 gap-y-4.5">
           <button
             type="button"
             onClick={() => setSelectedCategoryId(null)}
@@ -226,19 +226,19 @@ export function TopCoursesSection() {
         </div>
 
         {error ? (
-          <p className="mt-[1.5rem] text-center font-sans text-[0.875rem] text-red-500" role="alert">
+          <p className="mt-6 text-center font-sans text-[0.875rem] text-red-500" role="alert">
             {error}
           </p>
         ) : null}
 
-        <div className="mt-[2.5rem] grid grid-cols-1 gap-[1.875rem] sm:grid-cols-2 lg:grid-cols-4">
+        <div className="mt-10 grid grid-cols-1 gap-7.5 sm:grid-cols-2 lg:grid-cols-4">
           {displayedCourses.map((course) => (
             <CourseCard key={course.id} course={course} onCartClick={(c) => addToCartAuth({ id: c.id, title: c.title })} />
           ))}
         </div>
 
         {!error && displayedCourses.length === 0 ? (
-          <p className="mt-[2rem] text-center font-sans text-[0.875rem] text-slate-600">No courses match this category.</p>
+          <p className="mt-8 text-center font-sans text-[0.875rem] text-slate-600">No courses match this category.</p>
         ) : null}
       </div>
     </section>

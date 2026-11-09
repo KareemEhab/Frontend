@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import ReactStars from "react-stars";
-import { Link, Navigate } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import { api } from "../api/client";
 import { parseApiError } from "../api/errors";
 import { getAuthToken } from "../auth/token";
@@ -17,26 +17,26 @@ function CartLineCourse({
   onRemove,
 }: {
   course: ApiCourse;
-  onRemove: (id: string) => void;
+  onRemove: (id: string) => Promise<void>;
 }) {
   const img = resolveMediaUrl(course.image);
   const ratingValue = displayRating(course.id);
 
   return (
-    <div className="flex w-full justify-between gap-[1rem] rounded-[0.5rem] border border-solid border-[#E2E8F0] p-[1rem] font-sans">
-      <div className="flex min-w-0 flex-1 gap-[1rem]">
-        <div className="relative w-[7.5rem] shrink-0 self-stretch sm:w-[8.75rem]">
-          <img src={img} alt="" className="h-full w-full rounded-[0.25rem] object-cover" />
+    <div className="flex w-full justify-between gap-4 rounded-lg border border-solid border-[#E2E8F0] p-4 font-sans">
+      <div className="flex min-w-0 flex-1 gap-4">
+        <div className="relative w-30 shrink-0 self-stretch sm:w-35">
+          <img src={img} alt="" className="h-full w-full rounded-sm object-cover" />
           {course.discount > 0 ? (
-            <span className="absolute top-[0.375rem] right-[0.375rem] rounded-[0.25rem] bg-[#F232BD] px-[0.5rem] py-[0.125rem] font-sans text-[0.75rem] font-bold leading-[0.9375rem] text-white">
+            <span className="absolute top-1.5 right-1.5 rounded-sm bg-[#F232BD] px-2 py-0.5 font-sans text-[0.75rem] font-bold leading-3.75 text-white">
               -${course.discount}
             </span>
           ) : null}
         </div>
         <div className="flex min-w-0 flex-1 flex-col">
           <h2 className="font-sans text-[1.125rem] font-semibold leading-[160%] text-black">{course.title}</h2>
-          <p className="mt-[0.5rem] font-sans text-[0.875rem] font-normal leading-[150%] text-[#334155]">By {course.author}</p>
-          <div className="mt-[0.5rem] flex flex-wrap items-center gap-[0.5rem]">
+          <p className="mt-2 font-sans text-[0.875rem] font-normal leading-[150%] text-[#334155]">By {course.author}</p>
+          <div className="mt-2 flex flex-wrap items-center gap-2">
             <div className="inline-flex items-center">
               <ReactStars
                 count={5}
@@ -52,7 +52,7 @@ function CartLineCourse({
             <span className="font-sans text-[0.875rem] font-normal leading-[150%] text-[rgba(0,0,0,0.12)]" aria-hidden>
               |
             </span>
-            <div className="flex flex-wrap items-center gap-[0.5rem] font-sans text-[0.875rem] font-normal leading-[150%] text-[#334155]">
+            <div className="flex flex-wrap items-center gap-2 font-sans text-[0.875rem] font-normal leading-[150%] text-[#334155]">
               <span>{course.hours} Total Hours.</span>
               <span>{course.lectures} Lectures.</span>
               <span>{course.level}</span>
@@ -60,8 +60,10 @@ function CartLineCourse({
           </div>
           <button
             type="button"
-            className="mt-[0.5rem] w-fit cursor-pointer border-none bg-transparent p-0 font-sans text-[0.875rem] font-normal leading-[150%] text-[#DC2626] transition-opacity hover:opacity-80"
-            onClick={() => onRemove(course.id)}
+            className="mt-2 w-fit cursor-pointer border-none bg-transparent p-0 font-sans text-[0.875rem] font-normal leading-[150%] text-[#DC2626] transition-opacity hover:opacity-80"
+            onClick={() => {
+              void onRemove(course.id);
+            }}
           >
             Remove
           </button>
@@ -78,6 +80,7 @@ export function CartPage() {
   const { courseIds, removeCourseId } = useCart();
   const [courses, setCourses] = useState<ApiCourse[]>([]);
   const [loadError, setLoadError] = useState<string | null>(null);
+  const navigate = useNavigate();
 
   const loggedIn = Boolean(getAuthToken());
 
@@ -127,40 +130,40 @@ export function CartPage() {
   const crumbClass = "font-sans text-[0.875rem] font-normal leading-[150%] text-[#334155] transition-colors hover:text-[#0F172A] hover:underline";
 
   return (
-    <section className="px-[3.125rem] pt-[1.5625rem] pb-[3.125rem] font-sans">
-      <div className="mx-auto flex max-w-[90rem] flex-col gap-[3.75rem] lg:flex-row lg:justify-between">
+    <section className="px-12.5 pt-6.25 pb-12.5 font-sans">
+      <div className="mx-auto flex max-w-360 flex-col gap-15 lg:flex-row lg:justify-between">
         <div className="min-w-0 flex-1">
-          <nav className="flex flex-wrap items-center gap-[0.5rem]" aria-label="Breadcrumb">
+          <nav className="flex flex-wrap items-center gap-2" aria-label="Breadcrumb">
             <Link to="/" className={crumbClass}>
               Categories
             </Link>
-            <img src={breadcrumbArrowWhite} alt="" width={24} height={24} className="h-[0.625rem] w-auto shrink-0" />
+            <img src={breadcrumbArrowWhite} alt="" width={24} height={24} className="h-2.5 w-auto shrink-0" />
             <Link to="/" className={crumbClass}>
               Details
             </Link>
-            <img src={breadcrumbArrowWhite} alt="" width={24} height={24} className="h-[0.625rem] w-auto shrink-0" />
+            <img src={breadcrumbArrowWhite} alt="" width={24} height={24} className="h-2.5 w-auto shrink-0" />
             <span className="font-sans text-[0.875rem] font-normal leading-[150%] text-[#2563EB]" aria-current="page">
               Shopping Cart
             </span>
           </nav>
 
-          <h1 className="mt-[0.5rem] font-sans text-[2rem] font-semibold leading-[130%] text-[#0F172A]">
+          <h1 className="mt-2 font-sans text-[2rem] font-semibold leading-[130%] text-[#0F172A]">
             Shopping Cart
           </h1>
 
-          <div className="mt-[0.5625rem] h-px w-full bg-[#E2E8F0]" role="separator" />
+          <div className="mt-2.25 h-px w-full bg-[#E2E8F0]" role="separator" />
 
-          <p className="mt-[0.5625rem] font-sans text-[0.875rem] font-normal leading-[150%] text-[#334155]">
+          <p className="mt-2.25 font-sans text-[0.875rem] font-normal leading-[150%] text-[#334155]">
             {courseIds.length} Course(s) in cart
           </p>
 
           {loadError ? (
-            <p className="mt-[1rem] font-sans text-[0.875rem] text-red-600" role="alert">
+            <p className="mt-4 font-sans text-[0.875rem] text-red-600" role="alert">
               {loadError}
             </p>
           ) : null}
 
-          <div className="mt-[1rem] flex flex-col gap-[1rem]">
+          <div className="mt-4 flex flex-col gap-4">
             {courses.map((c) => (
               <CartLineCourse key={c.id} course={c} onRemove={removeCourseId} />
             ))}
@@ -173,21 +176,21 @@ export function CartPage() {
         <aside className="w-full shrink-0 lg:w-[min(100%,22.5rem)]">
           <h2 className="font-sans text-[1.25rem] font-semibold leading-[150%] text-[#2437AC]">Order Details</h2>
 
-          <div className="mt-[0.5rem] rounded-[0.5rem] border border-solid border-[#E2E8F0] bg-[#F8FAFC] p-[1rem]">
-            <div className="flex flex-col gap-[1rem]">
-              <div className="flex items-center justify-between gap-[1rem]">
+          <div className="mt-2 rounded-lg border border-solid border-[#E2E8F0] bg-[#F8FAFC] p-4">
+            <div className="flex flex-col gap-4">
+              <div className="flex items-center justify-between gap-4">
                 <span className="font-sans text-[1rem] font-normal leading-[160%] text-[#0F172A]">Price</span>
                 <span className="font-sans text-[1.125rem] font-semibold leading-[160%] text-[#0F172A]">
                   ${totals.originalSum.toFixed(1)}
                 </span>
               </div>
-              <div className="flex items-center justify-between gap-[1rem]">
+              <div className="flex items-center justify-between gap-4">
                 <span className="font-sans text-[1rem] font-normal leading-[160%] text-[#0F172A]">Discount</span>
                 <span className="font-sans text-[1.125rem] font-semibold leading-[160%] text-[#0F172A]">
                   -${totals.discountSum.toFixed(1)}
                 </span>
               </div>
-              <div className="flex items-center justify-between gap-[1rem]">
+              <div className="flex items-center justify-between gap-4">
                 <span className="font-sans text-[1rem] font-normal leading-[160%] text-[#0F172A]">Tax</span>
                 <span className="font-sans text-[1.125rem] font-semibold leading-[160%] text-[#0F172A]">
                   ${totals.tax.toFixed(2)}
@@ -195,9 +198,9 @@ export function CartPage() {
               </div>
             </div>
 
-            <div className="mt-[1rem] h-px w-full bg-[#E2E8F0]" role="separator" />
+            <div className="mt-4 h-px w-full bg-[#E2E8F0]" role="separator" />
 
-            <div className="mt-[1rem] flex items-center justify-between gap-[1rem]">
+            <div className="mt-4 flex items-center justify-between gap-4">
               <span className="font-sans text-[1.25rem] font-semibold leading-[150%] text-[#0F172A]">Total</span>
               <span className="font-sans text-[1.25rem] font-semibold leading-[150%] text-[#0F172A]">
                 ${totals.grandTotal.toFixed(2)}
@@ -207,7 +210,9 @@ export function CartPage() {
 
           <button
             type="button"
-            className="mt-[1rem] w-full cursor-pointer rounded-[0.25rem] border-none bg-[#00B8FF] py-[0.8125rem] font-sans text-[0.875rem] font-medium leading-[160%] text-white transition-opacity hover:opacity-90"
+            className="mt-4 w-full cursor-pointer rounded-sm border-none bg-[#00B8FF] py-3.25 font-sans text-[0.875rem] font-medium leading-[160%] text-white transition-opacity hover:opacity-90"
+            onClick={() => navigate("/checkout")}
+            disabled={courseIds.length === 0}
           >
             Proceed To Checkout
           </button>

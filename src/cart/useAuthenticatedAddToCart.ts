@@ -12,13 +12,13 @@ export function useAuthenticatedAddToCart() {
   const { addCourseId } = useCart();
 
   return useCallback(
-    (course: CourseRef) => {
+    async (course: CourseRef) => {
       if (!getAuthToken()) {
         storePendingCartAdd({ id: course.id, title: course.title });
         navigate("/login", { state: { from: `${location.pathname}${location.search}` } });
         return;
       }
-      const added = addCourseId(course.id);
+      const added = await addCourseId(course.id);
       if (added) {
         toast.success(`${course.title} added to cart`);
       } else {

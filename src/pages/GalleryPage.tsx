@@ -28,7 +28,7 @@ export function GalleryPage() {
   }, []);
 
   return (
-    <div className="mx-auto max-w-7xl px-[0.875rem] py-12 font-sans">
+    <div className="mx-auto max-w-7xl px-3.5 py-12 font-sans">
       <h1 className="font-poppins text-2xl font-semibold text-[#2F327D]">Gallery</h1>
       {error ? (
         <p className="mt-4 text-sm text-red-500" role="alert">
